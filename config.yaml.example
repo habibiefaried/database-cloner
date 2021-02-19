@@ -1,0 +1,12 @@
+source:
+  host: 127.0.0.1
+  port: 8080
+  username: 8080
+  password: 8080
+  database: 8080
+destination:
+  host: 127.0.0.1
+  port: 8080
+  username: 8080
+  password: 8080
+  database: 8080
