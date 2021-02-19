@@ -1,12 +1,13 @@
+type: mysql
 source:
-  host: 127.0.0.1
-  port: 8080
-  username: 8080
-  password: 8080
-  database: 8080
+  host: sourcehost
+  port: sourceport
+  username: sourceuser
+  password: sourcepass
+  database: sourcedb
 destination:
-  host: 127.0.0.1
-  port: 8080
-  username: 8080
-  password: 8080
-  database: 8080
+  host: desthost
+  port: destport
+  username: destuser
+  password: destpass
+  database: destdb
