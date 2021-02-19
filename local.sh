@@ -1,4 +1,5 @@
 #!/bin/bash
 docker rm -f database-cloner
+make
 docker build . -t database-cloner
-docker run -dit --name database-cloner database-cloner
+docker run -dit -v ${PWD}/config.yaml.example:/config.yaml --name database-cloner database-cloner
