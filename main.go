@@ -138,12 +138,12 @@ func main() {
 		var URIsrc string
 		var URIdest string
 		if config.Source.Username == "" {
-			URIsrc = fmt.Sprintf("mongodb://%v:%v", config.Source.Host, config.Source.Port)
+			URIsrc = fmt.Sprintf("mongodb://%v:%v/%v", config.Source.Host, config.Source.Port, config.Source.Database)
 		} else {
-			URIsrc = fmt.Sprintf("mongodb://%v:%v@%v:%v/?authSource=admin", config.Source.Username, config.Source.Password, config.Source.Host, config.Source.Port)
+			URIsrc = fmt.Sprintf("mongodb://%v:%v@%v:%v/%v?authSource=admin", config.Source.Username, config.Source.Password, config.Source.Host, config.Source.Port, config.Source.Database)
 		}
 
-		command := fmt.Sprintf("mongodump -d %v --uri %v -o /tmp/dump", config.Source.Database, URIsrc)
+		command := fmt.Sprintf("mongodump -v --forceTableScan --uri %v -o /tmp/dump/", URIsrc)
 		out, err := runCommandExec(command)
 		if err != nil {
 			log.Fatal(err)
@@ -151,12 +151,12 @@ func main() {
 		fmt.Println(out)
 
 		if config.Destination.Username == "" {
-			URIdest = fmt.Sprintf("mongodb://%v:%v", config.Destination.Host, config.Destination.Port)
+			URIdest = fmt.Sprintf("mongodb://%v:%v/%v", config.Destination.Host, config.Destination.Port, config.Destination.Database)
 		} else {
-			URIdest = fmt.Sprintf("mongodb://%v:%v@%v:%v/?authSource=admin", config.Destination.Username, config.Destination.Password, config.Source.Host, config.Source.Port)
+			URIdest = fmt.Sprintf("mongodb://%v:%v@%v:%v/%v?authSource=admin", config.Destination.Username, config.Destination.Password, config.Source.Host, config.Source.Port, config.Destination.Database)
 		}
 
-		command = fmt.Sprintf("mongorestore -d %v --uri %v /tmp/dump", config.Destination.Database, URIdest)
+		command = fmt.Sprintf("mongorestore --uri %v /tmp/dump/", URIdest)
 		out, err = runCommandExec(command)
 		if err != nil {
 			log.Fatal(err)
