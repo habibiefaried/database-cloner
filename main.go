@@ -62,7 +62,7 @@ func main() {
 	}
 
 	if config.Type == "mysql" {
-		command := fmt.Sprintf("mysqldump -h %v -u %v -P %v –p %v %v > /tmp/dump.sql", config.Source.Host, config.Source.Username, config.Source.Port, config.Source.Password, config.Source.Database)
+		command := fmt.Sprintf("MYSQL_PWD=%v mysqldump -h %v -u %v -P %v %v > /tmp/dump.sql", config.Source.Password, config.Source.Host, config.Source.Username, config.Source.Port, config.Source.Database)
 		out, err := runCommandExec(command)
 		if err != nil {
 			fmt.Println(err)
@@ -70,7 +70,15 @@ func main() {
 		}
 		fmt.Println(out)
 
-		command = fmt.Sprintf("mysql -h %v -u %v -P %v –p %v %v < /tmp/dump.sql", config.Source.Host, config.Source.Username, config.Source.Port, config.Source.Password, config.Source.Database)
+		command = fmt.Sprintf("MYSQL_PWD=%v mysql -h %v -u %v -P %v -e \"CREATE DATABASE IF NOT EXISTS \\`%v\\` \"", config.Destination.Password, config.Destination.Host, config.Destination.Username, config.Destination.Port, config.Destination.Database)
+		out, err = runCommandExec(command)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Println(out)
+
+		command = fmt.Sprintf("MYSQL_PWD=%v mysql -h %v -u %v -P %v %v < /tmp/dump.sql", config.Destination.Password, config.Destination.Host, config.Destination.Username, config.Destination.Port, config.Destination.Database)
 		out, err = runCommandExec(command)
 		if err != nil {
 			fmt.Println(err)
