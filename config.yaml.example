@@ -1,13 +1,23 @@
+dryrun: true
 type: mysql
 source:
   host: sourcehost
   port: sourceport
   username: sourceuser
   password: sourcepass
-  database: sourcedb
+  database: 
+    - sourcedb1
+    - sourcedb2
+    - sourcedb3
+    - sourcedb4
+
 destination:
   host: desthost
   port: destport
   username: destuser
   password: destpass
-  database: destdb
+  database:
+    - destdb1
+    - destdb2
+    - destdb3
+    - destdb4
