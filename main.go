@@ -134,5 +134,36 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println(out)
+	} else if config.Type == "mongo" {
+		var URIsrc string
+		var URIdest string
+		if config.Source.Username == "" {
+			URIsrc = fmt.Sprintf("mongodb://%v:%v", config.Source.Host, config.Source.Port)
+		} else {
+			URIsrc = fmt.Sprintf("mongodb://%v:%v@%v:%v/?authSource=admin", config.Source.Username, config.Source.Password, config.Source.Host, config.Source.Port)
+		}
+
+		command := fmt.Sprintf("mongodump -d %v --uri %v -o /tmp/dump", config.Source.Database, URIsrc)
+		out, err := runCommandExec(command)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(out)
+
+		if config.Destination.Username == "" {
+			URIdest = fmt.Sprintf("mongodb://%v:%v", config.Destination.Host, config.Destination.Port)
+		} else {
+			URIdest = fmt.Sprintf("mongodb://%v:%v@%v:%v/?authSource=admin", config.Destination.Username, config.Destination.Password, config.Source.Host, config.Source.Port)
+		}
+
+		command = fmt.Sprintf("mongorestore -d %v --uri %v /tmp/dump", config.Destination.Database, URIdest)
+		out, err = runCommandExec(command)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(out)
+
+	} else {
+		fmt.Println("Not supported")
 	}
 }
