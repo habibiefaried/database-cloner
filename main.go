@@ -171,7 +171,7 @@ func main() {
 			if config.Destination.Username == "" {
 				URIdest = fmt.Sprintf("mongodb://%v:%v/%v", config.Destination.Host, config.Destination.Port, config.Destination.Database[k])
 			} else {
-				URIdest = fmt.Sprintf("mongodb://%v:%v@%v:%v/%v?authSource=admin", config.Destination.Username, config.Destination.Password, config.Source.Host, config.Source.Port, config.Destination.Database[k])
+				URIdest = fmt.Sprintf("mongodb://%v:%v@%v:%v/%v?authSource=admin", config.Destination.Username, config.Destination.Password, config.Destination.Host, config.Destination.Port, config.Destination.Database[k])
 			}
 
 			command = fmt.Sprintf("mongorestore --uri %v /tmp/dump/", URIdest)
